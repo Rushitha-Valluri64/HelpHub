@@ -351,7 +351,7 @@
     // Load Requests by Category
     function loadCategory(category) {
 	  selectedCategory = category; 
-      const url = `http://localhost:8080/api/acceptor/category/${category}`;
+      const url = `https://helphub-j2x8.onrender.com/api/acceptor/category/${category}`;
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -430,7 +430,7 @@
         return;
       }
 
-      fetch(`http://localhost:8080/api/donation/donate`, {
+      fetch(`https://helphub-j2x8.onrender.com/api/donation/donate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

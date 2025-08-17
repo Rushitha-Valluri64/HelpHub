@@ -134,7 +134,7 @@
     async function loadDonations() {
       try {		
 		const email = localStorage.getItem("userEmail");
-		const res = await fetch(`http://localhost:8080/api/donation/by-email?email=${encodeURIComponent(email)}`);
+		const res = await fetch(`https://helphub-j2x8.onrender.com/api/donation/by-email?email=${encodeURIComponent(email)}`);
         const data = await res.json();
         const container = document.getElementById("donationList");
 
@@ -186,7 +186,7 @@
 	  const categories = categoryField.value;
 
 	  try {
-	    const res = await fetch(`http://localhost:8080/api/donation/update/${id}`, {
+	    const res = await fetch(`https://helphub-j2x8.onrender.com/api/donation/update/${id}`, {
 	      method: "PUT",
 	      headers: {
 	        "Content-Type": "application/json"
@@ -218,7 +218,7 @@
 
       try {
 		const token = localStorage.getItem("token");
-		const res = await fetch(`http://localhost:8080/api/donation/delete/${id}`, {
+		const res = await fetch(`https://helphub-j2x8.onrender.com/api/donation/delete/${id}`, {
 		  method: "DELETE",
 		  headers: {
 		    "Authorization": `Bearer ${token}`
