@@ -1,0 +1,142 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #f5f7fa;
+  color: #333;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0077b6;
+  padding: 1rem 2rem;
+  color: white;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links li a:hover {
+  color: #ffd166;
+}
+
+/* Home Section Layout */
+.home-container {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 80px);
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Half Moon Description */
+.home-description {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.half-moon {
+  background: radial-gradient(circle at left center, #90e0ef, #0077b6);
+  padding: 3rem;
+  border-top-right-radius: 50% 100%;
+  border-bottom-right-radius: 50% 100%;
+  max-width: 500px;
+  color: white;
+  text-align: left;
+}
+
+.half-moon h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.half-moon p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.btn {
+  padding: 0.7rem 1.5rem;
+  background: #ffd166;
+  color: #000;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 25px;
+  transition: background 0.3s;
+}
+
+.btn:hover {
+  background: #ffb703;
+}
+
+/* Carousel Section */
+.home-carousel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel {
+  position: relative;
+  width: 90%;
+  max-width: 500px;
+  height: 350px;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.carousel img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.carousel img.active {
+  opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-container {
+    flex-direction: column;
+  }
+
+  .half-moon {
+    border-radius: 20px;
+    text-align: center;
+  }
+
+  .home-carousel {
+    margin-top: 2rem;
+  }
+}

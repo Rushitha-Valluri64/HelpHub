@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HelpHub - Donor Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff0f0, #ffe0ec);
+      color: #333;
+    }
+
+    .navbar {
+      background: #D37676;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(145deg, #f9c5d1, #d37676);
+      padding: 6px 12px;
+      border-radius: 40px;
+      box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar .logo img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .navbar .logo span {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 1rem;
+    }
+
+    h2 {
+      padding: 2rem 2rem 1rem;
+      color: #333;
+      text-align: center;
+    }
+
+    .donation-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 1rem auto;
+      max-width: 700px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .donation-card h4 {
+      margin-bottom: 5px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .edit-btn {
+      background-color: #FFD700;
+    }
+
+    .delete-btn {
+      background-color: #FF6B6B;
+      color: white;
+    }
+
+    .save-btn {
+      background-color: #32CD32;
+      color: white;
+    }
+
+    input, textarea {
+      width: 90%;
+      padding: 6px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="HelpHub Logo" />
+      <span>HelpHub</span>
+    </div>
+    <ul>
+      <li><a href="home.html">🏠 Home</a></li>
+      <li><a href="donor_dashboard.html">↩️ Back</a></li>
+      <li><a href="about.html">ℹ About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ✅ CONTENT -->
+  <h2>📋 Your Donations</h2>
+  <div id="donationList"></div>
+
+  <script>
+    async function loadDonations() {
+      try {		
+		const email = localStorage.getItem("userEmail");
+		const res = await fetch(`http://localhost:8080/api/donation/by-email?email=${encodeURIComponent(email)}`);
+        const data = await res.json();
+        const container = document.getElementById("donationList");
+
+        container.innerHTML = data.map(d => `
+          <div class="donation-card" data-id="${d.id}">
+            <div class="display-mode">
+              <h4>${d.donorName}</h4>
+              <p><strong>Phone:</strong> ${d.donorPhoneNum}</p>
+              <p><strong>Location:</strong> ${d.donorGPSLocation}</p>			  			  
+			  <p><strong>Categories:</strong> ${Array.isArray(d.categories) && d.categories.length > 0 ? d.categories.join(", ") : "❌ Not provided"}</p>
+              <button class="btn edit-btn" onclick="editDonation(${d.id})">✏ Edit</button>
+              <button class="btn delete-btn" onclick="deleteDonation(${d.id})">🗑 Cancel</button>
+            </div>
+            <div class="edit-mode" style="display:none;">
+              <input type="text" id="donorName-${d.id}" value="${d.donorName}" placeholder="Donor Name" />
+              <input type="text" id="donorPhoneNum-${d.id}" value="${d.donorPhoneNum}" placeholder="Phone" />
+              <input type="text" id="donorGPSLocation-${d.id}" value="${d.donorGPSLocation}" placeholder="Location" />
+              <input type="text" id="categories-${d.id}" value="${d.categories}" placeholder="Categories" />
+              <button class="btn save-btn" onclick="saveDonation(${d.id})">💾 Save</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        document.getElementById("donationList").innerHTML = "<p style='color:red;'>❌ Failed to load donations.</p>";
+        console.error(err);
+      }
+    }
+
+    function editDonation(id) {
+      const card = document.querySelector(`.donation-card[data-id='${id}']`);
+      card.querySelector(".display-mode").style.display = "none";
+      card.querySelector(".edit-mode").style.display = "block";
+    }
+
+	async function saveDonation(id) {
+	  const nameField = document.getElementById(`donorName-${id}`);
+	  const phoneField = document.getElementById(`donorPhoneNum-${id}`);
+	  const gpsField = document.getElementById(`donorGPSLocation-${id}`);
+	  const categoryField = document.getElementById(`categories-${id}`);
+
+	  if (!nameField || !phoneField || !gpsField || !categoryField) {
+	    alert("Some input fields are missing in the DOM.");
+	    return;
+	  }
+
+	  const donorName = nameField.value;
+	  const donorPhoneNum = phoneField.value;
+	  const donorGPSLocation = gpsField.value;
+	  const categories = categoryField.value;
+
+	  try {
+	    const res = await fetch(`http://localhost:8080/api/donation/update/${id}`, {
+	      method: "PUT",
+	      headers: {
+	        "Content-Type": "application/json"
+	      },
+	      body: JSON.stringify({
+	        donorName,
+	        donorPhoneNum,
+	        donorGPSLocation,
+	        categories: categories.split(','),
+			status: "Pending"
+	      })
+	    });
+
+	    if (res.ok) {
+	      alert("Donation updated successfully");
+	      location.reload();
+	    } else {
+	      alert("Failed to update donation");
+	    }
+	  } catch (err) {
+	    console.error("Error:", err);
+	    alert("An error occurred during update");
+	  }
+	}
+
+
+    async function deleteDonation(id) {
+      if (!confirm("Are you sure you want to cancel this donation?")) return;
+
+      try {
+		const token = localStorage.getItem("token");
+		const res = await fetch(`http://localhost:8080/api/donation/delete/${id}`, {
+		  method: "DELETE",
+		  headers: {
+		    "Authorization": `Bearer ${token}`
+		  }
+		});
+
+
+        if (res.ok) {
+          alert("🗑 Donation canceled!");
+          loadDonations();
+        } else {
+          const result = await res.text();
+          alert("❌ Failed to cancel: " + result);
+        }
+      } catch (err) {
+        alert("❌ Error: " + err.message);
+      }
+    }
+
+    // Load on page load
+    loadDonations();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HelpHub - Acceptor Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fff0f0, #ffe0ec);
+      color: #333;
+    }
+
+    .navbar {
+      background: #D37676;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(145deg, #f9c5d1, #d37676);
+      padding: 6px 12px;
+      border-radius: 40px;
+      box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar .logo img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .navbar .logo span {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 1rem;
+    }
+
+    h2 {
+      padding: 2rem 2rem 1rem;
+      color: #333;
+      text-align: center;
+    }
+
+    .request-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 1rem auto;
+      max-width: 700px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .request-card h4 {
+      margin-bottom: 5px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .edit-btn {
+      background-color: #FFD700;
+    }
+
+    .delete-btn {
+      background-color: #FF6B6B;
+      color: white;
+    }
+
+    .save-btn {
+      background-color: #32CD32;
+      color: white;
+    }
+
+    input, textarea {
+      width: 90%;
+      padding: 6px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="HelpHub Logo" />
+      <span>HelpHub</span>
+    </div>
+    <ul>
+      <li><a href="home.html">🏠 Home</a></li>
+      <li><a href="acceptor.html">↩️ Back</a></li>
+      <li><a href="about.html">ℹ About</a></li>
+    </ul>
+  </nav>
+
+  <!-- ✅ CONTENT -->
+  <h2>📋 Your Requests</h2>
+  <div id="requestList"></div>
+
+  <script>
+    async function loadRequests() {
+      try {
+		const email = localStorage.getItem("userEmail");
+		const res = await fetch(`http://localhost:8080/api/acceptor/by-email?email=${encodeURIComponent(email)}`);
+		const data = await res.json();
+        const container = document.getElementById("requestList");
+
+        container.innerHTML = data.map(r => `
+          <div class="request-card" data-id="${r.id}">
+            <div class="display-mode">
+              <h4>${r.name}</h4>
+              <p><strong>Phone:</strong> ${r.phone}</p>
+              <p><strong>Location:</strong> ${r.location}</p>
+              <p><strong>Needs:</strong> ${r.categories}</p>
+              <button class="btn edit-btn" onclick="editRequest(${r.id})">✏ Edit</button>
+              <button class="btn delete-btn" onclick="deleteRequest(${r.id})">🗑 Delete</button>
+            </div>
+            <div class="edit-mode" style="display:none;">
+              <input type="text" id="name-${r.id}" value="${r.name}" placeholder="Name" />
+              <input type="text" id="phone-${r.id}" value="${r.phone}" placeholder="Phone" />
+              <input type="text" id="location-${r.id}" value="${r.location}" placeholder="Location" />
+              <input type="text" id="categories-${r.id}" value="${r.categories}" placeholder="Needs (comma separated)" />
+              <button class="btn save-btn" onclick="saveRequest(${r.id})">💾 Save</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        document.getElementById("requestList").innerHTML = "<p style='color:red;'>❌ Failed to load requests.</p>";
+        console.error(err);
+      }
+    }
+
+    function editRequest(id) {
+      const card = document.querySelector(`.request-card[data-id='${id}']`);
+      card.querySelector(".display-mode").style.display = "none";
+      card.querySelector(".edit-mode").style.display = "block";
+    }
+
+    async function saveRequest(id) {
+      const name = document.getElementById(`name-${id}`).value.trim();
+      const phone = document.getElementById(`phone-${id}`).value.trim();
+      const location = document.getElementById(`location-${id}`).value.trim();
+      const categories = document.getElementById(`categories-${id}`).value.trim();
+
+      try {
+        const res = await fetch(`http://localhost:8080/api/acceptor/update/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, phone, location, categories })
+        });
+
+        if (res.ok) {
+          alert("✅ Request updated successfully!");
+          loadRequests();
+        } else {
+          const errorText = await res.text();
+          alert("❌ Failed to update: " + errorText);
+        }
+      } catch (err) {
+        alert("❌ Error: " + err.message);
+      }
+    }
+
+    async function deleteRequest(id) {
+      if (!confirm("Are you sure you want to delete this request?")) return;
+
+      try {
+        const res = await fetch(`http://localhost:8080/api/acceptor/delete/${id}`, {
+          method: "DELETE"
+        });
+
+        if (res.ok) {
+          alert("🗑 Request deleted!");
+          loadRequests();
+        } else {
+          const result = await res.text();
+          alert("❌ Failed to delete: " + result);
+        }
+      } catch (err) {
+        alert("❌ Error: " + err.message);
+      }
+    }
+
+    // Initial load
+    loadRequests();
+  </script>
+</body>
+</html>

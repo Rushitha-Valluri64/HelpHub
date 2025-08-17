@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Choose Role - HelpHub</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fdf0f3, #ffeef1);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background-color: #D37676;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .navbar .logo img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .navbar .links a {
+      text-decoration: none;
+      margin-left: 2rem;
+      color: white;
+      font-weight: 500;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      color: #8b0000;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .cards {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      width: 280px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+    }
+
+    .card span {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1rem;
+      color: #d90429;
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      color: #8b0000;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .cards {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="HelpHub Logo" />
+      <span>HelpHub</span>
+    </div>
+    <div class="links">
+      <a href="home.html">🏠 Home</a>
+	  <a href="login.html">↩️ Back</a>
+      <a href="about.html">ℹ️ About</a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <h1>Choose Who You Are???</h1>
+    <div class="cards">
+      <a href="donor_dashboard.html" class="card">
+        <span>🤝</span>
+        <h2>I'm a Donor</h2>
+        <p>Provide donations like clothes, food, books, or gadgets and help those in need.</p>
+      </a>
+      <a href="acceptor.html" class="card">
+        <span>📥</span>
+        <h2>I'm an Acceptor</h2>
+        <p>Request the support you need from generous donors around your area.</p>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
