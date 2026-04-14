@@ -1,0 +1,25 @@
+# Virtual Environment
+HELPHUB_ENV/
+venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+
+# Java / Spring Boot
+target/
+*.log
+*.class
+*.jar
+*.war
+*.ear
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# OS Files
+.DS_Store
+Thumbs.db
