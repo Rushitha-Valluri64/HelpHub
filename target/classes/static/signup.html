@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HelpHub - Signup</title>
+  <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+      }
+
+      body {
+        background-color: #fff5f5;
+      }
+
+      /* Navbar */
+      .navbar {
+        background: #D37676;
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .navbar .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .navbar .logo img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .navbar .logo span {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+      }
+
+      .navbar ul {
+        list-style: none;
+        display: flex;
+        gap: 2rem;
+      }
+
+      .navbar ul li a {
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: color 0.3s;
+      }
+
+      .container {
+        max-width: 400px;
+        background-color: #fff;
+        padding: 2rem;
+        margin: 3rem auto;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: #d90429;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      input {
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      button {
+        background-color: #ef233c;
+        color: white;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #d90429;
+      }
+
+      .signup-link {
+        margin-top: 1rem;
+        text-align: center;
+        font-size: 0.95rem;
+      }
+
+      .signup-link a {
+        color: #ef233c;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .signup-link a:hover {
+        text-decoration: underline;
+      }
+
+      .message {
+        margin-top: 1rem;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+      }
+
+      .success {
+        color: green;
+      }
+
+      .error {
+        color: red;
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          margin: 2rem 1rem;
+        }
+      }
+	  .error-msg {
+	        color: red;
+	        font-size: 0.85rem;
+	        margin-top: -0.8rem;
+	        margin-bottom: 0.8rem;
+	      }
+
+	      .success-msg {
+	        color: green;
+	        font-size: 0.85rem;
+	        margin-top: -0.8rem;
+	        margin-bottom: 0.8rem;
+	      }
+
+	      input.invalid {
+	        border-color: red;
+	      }
+
+	      input.valid {
+	        border-color: green;
+	      }
+    </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="HelpHub Logo" />
+      <span>HelpHub</span>
+    </div>
+    <ul>
+      <li><a href="home.html">🏠 Home</a></li>
+      <li><a href="signup.html">📝 Signup</a></li>
+      <li><a href="login.html">🔑 Login</a></li>
+      <li><a href="about.html">ℹ️ About</a></li>
+    </ul>
+  </nav>
+
+  <!-- Signup Form -->
+  <div class="container">
+    <h2>Create an Account</h2>
+    <form id="signup-form">
+      <input type="text" id="name" placeholder="Full Name" required />
+      <div class="error-msg" id="name-error"></div>
+
+      <input type="email" id="email" placeholder="Email Address" required />
+      <div class="error-msg" id="email-error"></div>
+
+      <input type="tel" id="phone" placeholder="Phone Number" required />
+      <div class="error-msg" id="phone-error"></div>
+
+      <input type="password" id="password" placeholder="Password" required />
+      <div class="error-msg" id="password-error"></div>
+
+      <input type="password" id="confirm" placeholder="Confirm Password" required />
+      <div class="error-msg" id="confirm-error"></div>
+
+      <button type="submit">Signup</button>
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <div class="login-link">
+      Already have an account? <a href="login.html">Login here</a>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("signup-form");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name");
+      const email = document.getElementById("email");
+      const phone = document.getElementById("phone");
+      const password = document.getElementById("password");
+      const confirm = document.getElementById("confirm");
+
+      const nameError = document.getElementById("name-error");
+      const emailError = document.getElementById("email-error");
+      const phoneError = document.getElementById("phone-error");
+      const passwordError = document.getElementById("password-error");
+      const confirmError = document.getElementById("confirm-error");
+
+      // Reset error messages
+      nameError.textContent = "";
+      emailError.textContent = "";
+      phoneError.textContent = "";
+      passwordError.textContent = "";
+      confirmError.textContent = "";
+
+      let isValid = true;
+
+      // Name validation
+      if (name.value.trim().length < 3) {
+        nameError.textContent = "Name must be at least 3 characters.";
+        name.classList.add("invalid");
+        isValid = false;
+      } else {
+        name.classList.remove("invalid");
+        name.classList.add("valid");
+      }
+
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email.value)) {
+        emailError.textContent = "Invalid email address.";
+        email.classList.add("invalid");
+        isValid = false;
+      } else {
+        email.classList.remove("invalid");
+        email.classList.add("valid");
+      }
+
+      // Phone validation
+      const phoneRegex = /^\d{10}$/;
+      if (!phoneRegex.test(phone.value)) {
+        phoneError.textContent = "Phone number must be 10 digits.";
+        phone.classList.add("invalid");
+        isValid = false;
+      } else {
+        phone.classList.remove("invalid");
+        phone.classList.add("valid");
+      }
+
+      // Password validation
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!passwordRegex.test(password.value)) {
+        passwordError.textContent =
+          "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.";
+        password.classList.add("invalid");
+        isValid = false;
+      } else {
+        password.classList.remove("invalid");
+        password.classList.add("valid");
+      }
+
+      // Confirm Password validation
+      if (password.value !== confirm.value) {
+        confirmError.textContent = "Passwords do not match.";
+        confirm.classList.add("invalid");
+        isValid = false;
+      } else {
+        confirm.classList.remove("invalid");
+        confirm.classList.add("valid");
+      }
+
+	  if (isValid) {
+	    console.log("Form is valid. Sending data...");
+	    console.log({
+	      name: name.value,
+	      email: email.value,
+	      phone: phone.value,
+	      password: password.value,
+	    });
+
+		fetch("/api/users/register", {
+		  method: "POST",
+		  headers: { "Content-Type": "application/json" },
+		  body: JSON.stringify({
+		    name: name.value,
+		    email: email.value,
+		    phone: phone.value,
+		    password: password.value,
+		  }),
+		})
+		  .then(async (response) => {
+		    const message = await response.text();
+		    console.log("Response status:", response.status);
+		    console.log("Response message:", message);
+
+		    if (!response.ok) {
+		      throw new Error(message || "Signup failed.");
+		    }
+
+		    const messageEl = document.getElementById("message");
+		    messageEl.textContent = message;
+		    messageEl.className = "message success";
+		    form.reset();
+		    document.querySelectorAll("input").forEach((input) => input.classList.remove("valid"));
+		  })
+		  .catch((error) => {
+		    console.error("Error during signup:", error.message);
+		    const messageEl = document.getElementById("message");
+		    messageEl.textContent = error.message || "Signup failed. Please try again.";
+		    messageEl.className = "message error";
+		  });
+}
+
+    });
+  </script>
+
+</body>
+</html>

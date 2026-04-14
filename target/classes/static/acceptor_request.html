@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HelpHub - Acceptor</title>
+
+  <!-- Leaflet Map CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fefefe, #ffeef1);
+      color: #333;
+    }
+
+    .navbar {
+      background: #D37676;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: white;
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(145deg, #f9c5d1, #d37676);
+      padding: 6px 12px;
+      border-radius: 40px;
+    }
+
+    .navbar .logo img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+    }
+
+    .navbar .logo span {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .main {
+      display: flex;
+      height: 100vh;
+    }
+
+    .form-section {
+      flex: 1;
+      padding: 2rem;
+      background-color: #fff;
+      overflow-y: auto;
+    }
+
+    .form-section h2 {
+      font-size: 2rem;
+      color: #d00000;
+      margin-bottom: 1rem;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="email"] {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.4rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .gps-btn {
+      margin-top: 0.5rem;
+      background: #ef233c;
+      color: white;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .gps-btn:hover {
+      background: #c53030;
+    }
+
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 1rem;
+    }
+
+    .checkbox-grid label {
+      background: #ffe0e0;
+      padding: 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #otherText {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .submit-btn {
+      margin-top: 2rem;
+      padding: 0.75rem;
+      background: #e63946;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+    }
+
+    .right-image {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      clip-path: ellipse(100% 100% at 100% 50%);
+    }
+
+    .carousel img {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .carousel img.active {
+      opacity: 1;
+    }
+
+    .success-message,
+    .error-message {
+      margin-top: 1rem;
+      padding: 10px;
+      border-radius: 6px;
+      display: none;
+    }
+
+    .success-message {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .error-message {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    #map {
+      display: none;
+      height: 300px;
+      margin-top: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+      }
+
+      .right-image {
+        clip-path: none;
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="HelpHub Logo" />
+      <span>HelpHub</span>
+    </div>
+    <ul>
+      <li><a href="home.html">🏠 Home</a></li>
+      <li><a href="acceptor.html">↩️ Back</a></li>
+      <li><a href="about.html">ℹ About</a></li>
+    </ul>
+  </nav>
+
+  <div class="main">
+    <div class="form-section">
+      <h2>Acceptor Form</h2>
+      <form id="acceptorForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required>
+
+        <label for="email">Email Address:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="Enter your location or use GPS" />
+        <button type="button" class="gps-btn" onclick="getLocation()">📍 Use My Location</button>
+        <button type="button" class="gps-btn" onclick="viewMap()">🌍 View Location on Map</button>
+
+        <div id="map"></div>
+
+        <label>Categories Needed:</label>
+        <div class="checkbox-grid">
+          <label><input type="checkbox" name="category" value="Clothing"> Clothing</label>
+          <label><input type="checkbox" name="category" value="Food"> Food</label>
+          <label><input type="checkbox" name="category" value="Books"> Books</label>
+          <label><input type="checkbox" name="category" value="Money"> Money</label>
+          <label><input type="checkbox" name="category" value="Accessories"> Accessories</label>
+          <label>
+            <input type="checkbox" id="otherCheckbox" name="category" value="other"> Other
+            <input type="text" id="otherText" placeholder="Please specify" style="display: none;" />
+          </label>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Request to Donors</button>
+        <div class="success-message" id="successMessage"></div>
+        <div class="error-message" id="errorMessage"></div>
+      </form>
+    </div>
+
+    <div class="right-image">
+      <div class="carousel">
+        <img src="images/d1.jpg" class="active" alt="1" />
+        <img src="images/d2.jpg" alt="2" />
+        <img src="images/d3.jpg" alt="3" />
+        <img src="images/d4.jpg" alt="4" />
+        <img src="images/d5.jpg" alt="5" />
+        <img src="images/d6.jpg" alt="6" />
+        <img src="images/d7.jpg" alt="7" />
+        <img src="images/d8.jpg" alt="8" />
+        <img src="images/d9.jpg" alt="9" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("acceptorForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const location = document.getElementById("location").value.trim();
+
+      const selectedCategories = Array.from(document.querySelectorAll("input[name='category']:checked"))
+        .map(cb => cb.value)
+        .filter(val => val !== "other");
+
+      if (document.getElementById("otherCheckbox").checked) {
+        const other = document.getElementById("otherText").value.trim();
+        if (other) selectedCategories.push(other);
+      }
+
+      const requestBody = {
+        name,
+        phone,
+        email,
+        location,
+        categories: selectedCategories.join(", ")
+      };
+
+      const successMsg = document.getElementById("successMessage");
+      const errorMsg = document.getElementById("errorMessage");
+      successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("⚠️ You must be logged in to submit a request.");
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:8082/api/acceptor/create", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          successMsg.innerHTML = `✅ Request submitted successfully! Your ID is ${result.id}`;
+          successMsg.style.display = 'block';
+          document.getElementById("acceptorForm").reset();
+          window.location.href = "thankyou.html";
+        } else {
+          const error = await response.json();
+          errorMsg.innerHTML = `❌ Error: ${error.message}`;
+          errorMsg.style.display = 'block';
+        }
+      } catch (error) {
+        console.error("Error submitting request:", error);
+        errorMsg.innerHTML = "❌ An error occurred while submitting the request.";
+        errorMsg.style.display = 'block';
+      }
+    });
+
+    // View map with OpenStreetMap
+    function viewMap() {
+      const locationInput = document.getElementById("location").value.trim();
+      const mapDiv = document.getElementById("map");
+
+      if (!locationInput) {
+        alert("Please enter a location first.");
+        return;
+      }
+
+      mapDiv.style.display = "block";
+      mapDiv.innerHTML = ""; // Clear previous map
+
+      fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationInput)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length === 0) {
+            alert("Location not found on map.");
+            return;
+          }
+
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+
+          const map = L.map('map').setView([lat, lon], 13);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+          }).addTo(map);
+
+          L.marker([lat, lon]).addTo(map)
+            .bindPopup(locationInput)
+            .openPopup();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Error loading map data.");
+        });
+    }
+
+    function getLocation() {
+      const locationInput = document.getElementById("location");
+      const button = document.querySelector(".gps-btn");
+
+      const LOCATIONIQ_API_KEY = "pk.deaf92da6ccb8e663d6823cede972609";
+
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by this browser.");
+        return;
+      }
+
+      button.disabled = true;
+      button.innerText = "📍 Getting Location...";
+
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+			const url = `https://us1.locationiq.com/v1/reverse?key=${LOCATIONIQ_API_KEY}&lat=${lat}&lon=${lon}&format=json&accept-language=en`;
+			const response = await fetch(url);
+          const data = await response.json();
+
+          if (data && data.display_name) {
+            locationInput.value = data.display_name;
+          } else {
+            locationInput.value = `${lat}, ${lon}`;
+            console.warn("LocationIQ response invalid:", data);
+          }
+        } catch (error) {
+          console.error("LocationIQ error:", error);
+          locationInput.value = `${lat}, ${lon}`;
+        }
+
+        button.disabled = false;
+        button.innerText = "📍 Use My Location";
+      }, (error) => {
+        console.error("Geolocation error:", error);
+        alert("Unable to retrieve your location.");
+        button.disabled = false;
+        button.innerText = "📍 Use My Location";
+      });
+    }
+  </script>
+</body>
+</html>
