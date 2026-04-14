@@ -1,0 +1,15 @@
+hai! my project is help a hub which means simply like an ngo app which includes all the donars and acceptors
+I need different html pages
+1.home page-which means a beautiful home page which describe our project and also we need navbar which includes signin,signup,about,contactus pages
+2.in signup page user need to add different information.
+3.after signin page 
+4.there are different highlighting buttons named as donar and acceptor we are select as donar it redirects to donar page otherwise as acceptor it redirects to acceptors page
+5.in about page I need curosal of past helping images and different ideas.
+6.in contact us page I need phone number , instagram ,facebook ,twitter pages. real pages
+7.in donar page  I need a form which includes donar information,mainly current location,differen highlighing buttons clothing,food,books,money,accessiors,cooking needs,electronic gadets,i also need a differnt acceptors list.
+8.in acceptor page i also need a accpeptor iformation mainly current location and donars list.
+9.at last after submitting both donar  it directly redirecting to thakyou page
+10.after acceptor submits it redirects to any page whih includes the information request send to donars
+the main aim of this project is donating and accepting.
+the backend of this project is springboot and mysql
+i want to highlight my project with the beautiful and creative html pages with beautiful backend images.

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - HelpHub</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #fff5f5;
+      color: #5a0000;
+    }
+
+    .navbar {
+      background: #D37676;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .navbar .logo img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+
+	.main {
+	      display: flex;
+	      background-color: #ffeef1;
+	      min-height: calc(100vh - 80px);
+	    }
+
+
+		.left-content {
+		      flex: 1;
+		      display: flex;
+		      flex-direction: column;
+		      justify-content: center;
+		      padding: 3rem;
+		    }
+
+			.left-content h1 {
+			      font-size: 1.8rem;
+			      color: #d00000;
+			      margin-top: 1rem;
+			      margin-bottom: 1rem;
+			    }
+
+		.left-content p {
+				      font-size: 1rem;
+				      margin-bottom: 1.5rem;
+				      color: #333;
+				    }
+
+	.right-video {
+	  flex: 1;
+	  position: relative;
+	  overflow: hidden;
+	  clip-path: ellipse(100% 100% at 100% 50%);
+	  height: 100vh; /* same as screen height */
+	}
+
+
+	.right-video video {
+	  width: 100%;
+	  height: 100%;
+	  object-fit: cover; /* or 'fill' if needed */
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	}
+
+
+    @media (max-width: 768px) {
+      .main {
+        flex-direction: column;
+        padding: 2rem 1rem;
+      }
+
+      .right-video {
+        clip-path: none;
+        height: 250px;
+        width: 100%;
+      }
+      
+
+      .left-content h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="logo">
+      <img src="images/logo.png" alt="HelpHub Logo" />
+      <span>HelpHub</span>
+    </div>
+    <div class="nav-links">
+      <a href="home.html">🏠 Home</a>
+      <a href="signup.html">📝 Signup</a>
+      <a href="login.html">🔑 Login</a>
+      <a href="about.html">ℹ️ About</a>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="left-content">
+      <h1>About HelpHub</h1>
+      <p>
+        HelpHub is a User-Friendly web application created to streamline the donation process between donors and acceptors.
+        HelpHub empowers users to contribute items such as clothes, food, books, gadgets, and more, and ensures the right help reaches the right hands.
+        Our goal is to foster a trusted, efficient, and scalable platform for all kinds of charitable giving.
+      </p>
+        </div>
+
+    <div class="right-video">
+      <video autoplay muted loop>
+        <source src="images/about.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+</body>
+</html>
